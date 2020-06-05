@@ -1,0 +1,2 @@
+rootProject.name='Cart_fragments'
+include ':app'

@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ntu.edu.vn.huythinh.cart_fragments.MainActivity">
+    <item
+        android:id="@+id/mnuCart"
+        android:icon="@drawable/ic_cart_foreground"
+        android:title="Item"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/mnuExit"
+        android:icon="@drawable/ic_exit_foreground"
+        android:title="Item"
+        app:showAsAction="always" />
+</menu>
