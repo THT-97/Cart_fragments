@@ -15,6 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import ntu.edu.vn.huythinh.controller.ICartController;
+import ntu.edu.vn.huythinh.model.Product;
+
 public class EditFragment extends Fragment implements View.OnClickListener {
 
 
@@ -22,7 +25,7 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     EditText edtPrice;
     EditText edtDesc;
     Button btnEdit, btnDelete, btnCancel;
-    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(FirstFragment.sharedRef, Context.MODE_PRIVATE);
+    SharedPreferences sharedPreferences;
     NavController navController;
 
     @Override
@@ -43,17 +46,17 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         edtName = view.findViewById(R.id.edtName);
         edtPrice = view.findViewById(R.id.edtPrice);
         edtDesc = view.findViewById(R.id.edtDesc);
-
+        Load();
         btnEdit = view.findViewById(R.id.btnEdit);
         btnDelete = view.findViewById(R.id.btnDelete);
         btnCancel = view.findViewById(R.id.btnCancelEdit);
         btnEdit.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-        Load();
     }
 
     @Override
@@ -67,6 +70,12 @@ public class EditFragment extends Fragment implements View.OnClickListener {
                     editor.putString(FirstFragment.keyPrice, edtPrice.getText().toString());
                     editor.putString(FirstFragment.keyDesc, edtDesc.getText().toString());
                     editor.commit();
+                    ICartController controller = (ICartController) getActivity().getApplication();
+                    Product p = new Product(
+                            edtName.getText().toString(),
+                            Integer.parseInt(edtPrice.getText().toString()),
+                            edtDesc.getText().toString());
+                    controller.getAllProduct().set(sharedPreferences.getInt(FirstFragment.keyPos,0), p);
                 }
                 break;
             }
@@ -86,9 +95,10 @@ public class EditFragment extends Fragment implements View.OnClickListener {
     }
 
     private void Load(){
-        edtName.setText(FirstFragment.keyName);
-        edtPrice.setText(FirstFragment.keyPrice);
-        edtDesc.setText(FirstFragment.keyDesc);
+        sharedPreferences = getActivity().getSharedPreferences(FirstFragment.sharedRef, Context.MODE_PRIVATE);
+        edtName.setText(sharedPreferences.getString(FirstFragment.keyName, "None"));
+        edtPrice.setText(sharedPreferences.getString(FirstFragment.keyPrice, "0"));
+        edtDesc.setText(sharedPreferences.getString(FirstFragment.keyDesc, "None"));
     }
 
 }

@@ -38,6 +38,7 @@ public class FirstFragment extends Fragment {
     public static final String keyName = "Name";
     public static final String keyPrice = "Price";
     public static final String keyDesc = "Description";
+    public static final String keyPos = "Position";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -142,6 +143,7 @@ public class FirstFragment extends Fragment {
                         editor.putString(keyName, product.getName());
                         editor.putString(keyPrice, String.valueOf(product.getPrice()));
                         editor.putString(keyDesc, product.getDesc());
+                        editor.putInt(keyPos, productList.indexOf(product));
                         editor.commit();
                     }
                     NavHostFragment.findNavController(FirstFragment.this)
