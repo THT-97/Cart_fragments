@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_Shop_Fragment_to_productFragment"
             app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_Shop_Fragment_to_editFragment"
+            app:destination="@id/editFragment" />
     </fragment>
     <fragment
         android:id="@+id/Cart_Fragment"
@@ -46,6 +49,16 @@
         <action
             android:id="@+id/action_confirmFragment_pop_including_Cart_Fragment"
             app:popUpTo="@id/Cart_Fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="ntu.edu.vn.huythinh.cart_fragments.EditFragment"
+        android:label="fragment_edit"
+        tools:layout="@layout/fragment_edit" >
+        <action
+            android:id="@+id/action_editFragment_pop"
+            app:popUpTo="@id/editFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

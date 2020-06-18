@@ -1,5 +1,7 @@
 package ntu.edu.vn.huythinh.cart_fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +33,11 @@ public class FirstFragment extends Fragment {
     List<Product> productList;
     FloatingActionButton fbtnCart;
     FloatingActionButton fbtnAddProduct;
+
+    public static final String sharedRef = "shared_ref";
+    public static final String keyName = "Name";
+    public static final String keyPrice = "Price";
+    public static final String keyDesc = "Description";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,7 +99,7 @@ public class FirstFragment extends Fragment {
     }
     private class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView txtName, txtPrice, txtDesc;
-        ImageView imvAddToCart;
+        ImageView imvAddToCart, imvEdit;
         Product product;
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -100,8 +107,11 @@ public class FirstFragment extends Fragment {
             txtName = this.itemView.findViewById(R.id.txtName);
             txtPrice = this.itemView.findViewById(R.id.txtPrice);
             txtDesc = this.itemView.findViewById(R.id.txtDesc);
+
             imvAddToCart = this.itemView.findViewById(R.id.imgAdd);
             imvAddToCart.setOnClickListener(this); //this has become an OnClickListener
+            imvEdit = this.itemView.findViewById(R.id.imgEdit);
+            imvEdit.setOnClickListener(this);
         }
 
         public void bind(Product product) {
@@ -114,12 +124,31 @@ public class FirstFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            int id = v.getId();
             ICartController controller = (ICartController) getActivity().getApplication();
-            if (controller.addToCart(product))
-                Toast.makeText(getContext(), product.getName() + " added to cart",
-                        Toast.LENGTH_SHORT).show();
-            else Toast.makeText(getContext(),product.getName() + " is already in cart",
-                    Toast.LENGTH_SHORT).show();
+            switch (id){
+                case R.id.imgAdd: {
+                    if (controller.addToCart(product))
+                        Toast.makeText(getContext(), product.getName() + " added to cart",
+                                Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(getContext(),product.getName() + " is already in cart",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                case R.id.imgEdit: {
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(sharedRef, Context.MODE_PRIVATE);
+                    if(sharedPreferences != null){
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(keyName, product.getName());
+                        editor.putString(keyPrice, String.valueOf(product.getPrice()));
+                        editor.putString(keyDesc, product.getDesc());
+                        editor.commit();
+                    }
+                    NavHostFragment.findNavController(FirstFragment.this)
+                            .navigate(R.id.action_Shop_Fragment_to_editFragment);
+                }
+            }
+
         }
     }
 
